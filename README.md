@@ -5,6 +5,8 @@
 
 > Super quick tool to export vlr.gg match data to ics for view in personal calendars
 
+I honestly just got tired of checking the schedule and seeing results spoiled online.
+
 ## Install
 
 ```sh
