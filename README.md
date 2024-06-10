@@ -20,6 +20,27 @@ node index.js
 ```
 verify creation of the file `Vlrgg.ics` in the project root and use!
 
+## FAQ
+Currently this is set to grab posted NA & EMEA matches (b/c they're what I can feasibly watch). It can be expanded to other regions/leages by updating the league search keys:
+
+```
+const EMEA_TITLE_PREFIX ='Champions Tour 2024: EME';
+const NA_TITLE_PREFIX ='Champions Tour 2024: North Americ';
+```
+
+and the function `shouldExport(..)`:
+
+```
+const shouldExport = (matchInfoElementNodes) => {
+  return matchInfoElementNodes.find(
+    (c) =>
+      c.type === "text" &&
+      (c.data.trim().startsWith(EMEA_TITLE_PREFIX) ||
+        c.data.trim().startsWith(NA_TITLE_PREFIX))
+  );
+};
+```
+
 ## Run tests
 
 ```sh
