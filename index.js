@@ -2,6 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import * as ics from "ics";
 import * as fs from "fs";
+import { parse, addHours } from 'date-fns';
 
 // Constants
 const SELECTOR_MATCHES_DATES =
@@ -26,9 +27,10 @@ const fetchAndParseData = async (page) => {
   const matches = [];
   tableElements.each((i, el) => {
     const date = dateElements[0].children[0].data.trim();
+    const parsedDate = parse(date, "EEE, MMMM dd, yyyy", new Date());
     const table = $(el);
     const foundMatches = table.find("a");
-    matches.push({date: date, matchEls: [...foundMatches]});
+    matches.push({ date: parsedDate, matchEls: [...foundMatches] });
   });
   return matches;
 };
@@ -65,37 +67,15 @@ const getMatchMetadata = (matchNodes) => {
   };
 };
 
-// ChatGPT for DTOs ;)
-const parseTime = (dateString, timeString) => {
-  const date = new Date(`${dateString} ${timeString}`);
-  return [
-    date.getFullYear(),
-    date.getMonth() + 1, // Months are zero-indexed in JavaScript
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-  ];
-};
-
-const addHours = (start, hours) => {
-  const date = new Date(start[0], start[1] - 1, start[2], start[3], start[4]);
-  date.setHours(date.getHours() + hours);
-  return [
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-  ];
-};
-
 const prepIcsBatch = (matches) => {
   return matches.map((match) => {
-    const start = parseTime(match.date, match.time);
-    const end = addHours(start, 1);
+    const startTime = parse(match.time, 'hh:mm a', new Date());
+    const startDate = match.date;
+    const startDateAndTime = addHours(startDate, startTime.getHours());
+    const endDateAndTime = addHours(startDateAndTime, 2);
     return {
-      start,
-      end,
+      start: [startDateAndTime.getFullYear(), startDateAndTime.getMonth() + 1, startDateAndTime.getDate(), startDateAndTime.getHours(), startDateAndTime.getMinutes()],
+      end: [endDateAndTime.getFullYear(), endDateAndTime.getMonth() + 1, endDateAndTime.getDate(), endDateAndTime.getHours(), endDateAndTime.getMinutes()],
       title: match.title,
     };
   });
