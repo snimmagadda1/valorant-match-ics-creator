@@ -26,7 +26,7 @@ const fetchAndParseData = async (page) => {
   const dateElements = $(SELECTOR_MATCHES_DATES);
   const matches = [];
   tableElements.each((i, el) => {
-    const date = dateElements[0].children[0].data.trim();
+    const date = dateElements[i].children[0].data.trim();
     const parsedDate = parse(date, "EEE, MMMM dd, yyyy", new Date());
     const table = $(el);
     const foundMatches = table.find("a");
