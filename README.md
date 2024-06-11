@@ -21,6 +21,7 @@ node index.js
 verify creation of the file `Vlrgg.ics` in the project root and use!
 
 ## FAQ
+
 Currently this is set to grab posted NA & EMEA matches (b/c they're what I can feasibly watch). It can be expanded to other regions/leages by updating the league search keys:
 
 ```
@@ -41,12 +42,6 @@ const shouldExport = (matchInfoElementNodes) => {
 };
 ```
 
-## Run tests
-
-```sh
-npm run test
-```
-
 ## Author
 
 👤 **Sai N. Nimmagadda**
@@ -57,7 +52,6 @@ npm run test
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
